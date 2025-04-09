@@ -57,8 +57,6 @@ export default function AudioPreview({ file }: AudioPreviewProps) {
             className="video-js vjs-default-skin vjs-big-play-centered"
             controls
             preload="auto"
-            width="100%"
-            height="60"
             data-setup='{"controlBar": {"volumePanel": {"inline": false}}}'
           >
             <source 
