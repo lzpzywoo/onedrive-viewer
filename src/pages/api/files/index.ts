@@ -8,15 +8,14 @@ export default async function handler(
 ) {
   // 从Cookie中获取访问令牌
   const accessToken = req.cookies.access_token;
-  const nextPageToken = localStorage.getItem('next_page_token');
-  
+
   if (!accessToken) {
     return res.status(401).json({ error: '未授权' });
   }
   
   try {
-    const { path = '/', search = '', page = '1', itemsPerPage = '20' } = req.query;
-    
+    const { path = '/', search = '', page = '1', itemsPerPage = '20', nextPageToken } = req.query;
+
     // 计算分页参数
     const pageNum = parseInt(page as string, 10);
     const itemsPerPageNum = parseInt(itemsPerPage as string, 10);
@@ -60,8 +59,6 @@ export default async function handler(
     // 获取总计数（用于分页）
     const total = graphResponse.data.value.length;
 
-    graphResponse.data['@odata.nextLink'] && localStorage.setItem('next_page_token', graphResponse.data['@odata.nextLink'].match(/&\$skiptoken=(.+)/i)[1]);
-
     // 格式化返回数据
     const files: FileItem[] = graphResponse.data.value.map((item: any) => {
       const isFolder = !!item.folder;
@@ -83,6 +80,7 @@ export default async function handler(
       files,
       total,
       hasMore: !!graphResponse.data['@odata.nextLink'],
+      nextPageToken: graphResponse.data['@odata.nextLink']
     });
     
   } catch (error: any) {
