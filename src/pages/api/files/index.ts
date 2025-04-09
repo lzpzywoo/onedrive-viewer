@@ -80,7 +80,7 @@ export default async function handler(
       files,
       total,
       hasMore: !!graphResponse.data['@odata.nextLink'],
-      nextPageToken: graphResponse.data['@odata.nextLink']
+      nextPageToken: !!graphResponse.data['@odata.nextLink'] ? graphResponse.data['@odata.nextLink'].match(/&\$skiptoken=(.+)/i)[1] : null,
     });
     
   } catch (error: any) {
