@@ -42,7 +42,7 @@ export default async function handler(
         mimeType: item.file ? item.file.mimeType : 'folder',
         isFolder,
         downloadUrl: item['@microsoft.graph.downloadUrl'] || '',
-        viewUrl: item.webUrl || '',
+        viewUrl: item['@microsoft.graph.downloadUrl'] || '',
         thumbnailUrl: '',
       };
     });

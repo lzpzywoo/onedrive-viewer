@@ -28,33 +28,35 @@ export default function FilePreview({ file, onClose }: FilePreviewProps) {
 
   const renderPreviewContent = () => {
     const fileType = getFileType(file.name).toLowerCase();
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
     
+    console.log("文件类型",fileType)
     // 根据文件类型渲染不同的预览组件
-    if (/^image\//.test(file.mimeType) || ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(fileType)) {
+    if (/^image\//.test(file.mimeType) || ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(extension)) {
       return <ImagePreview file={file} />;
     }
     
-    if (/^video\//.test(file.mimeType) || ['mp4', 'webm', 'mov', 'avi'].includes(fileType)) {
+    if (/^video\//.test(file.mimeType) || ['mp4', 'webm', 'mov', 'avi'].includes(extension)) {
       return <VideoPreview file={file} />;
     }
     
-    if (/^audio\//.test(file.mimeType) || ['mp3', 'wav', 'ogg', 'flac'].includes(fileType)) {
+    if (/^audio\//.test(file.mimeType) || ['mp3', 'wav', 'ogg', 'flac'].includes(extension)) {
       return <AudioPreview file={file} />;
     }
     
-    if (['pdf'].includes(fileType)) {
+    if (['pdf'].includes(extension)) {
       return <PDFPreview file={file} />;
     }
     
-    if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileType)) {
+    if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(extension)) {
       return <OfficePreview file={file} />;
     }
     
-    if (['md', 'markdown'].includes(fileType)) {
+    if (['md', 'markdown'].includes(extension)) {
       return <MarkdownPreview file={file} />;
     }
     
-    if (['txt', 'js', 'ts', 'html', 'css', 'json', 'xml', 'yaml', 'yml'].includes(fileType)) {
+    if (['txt', 'js', 'ts', 'html', 'css', 'json', 'xml', 'yaml', 'yml'].includes(extension)) {
       return <TextPreview file={file} />;
     }
     
