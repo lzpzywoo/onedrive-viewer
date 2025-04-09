@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_MICROSOFT_CLIENT_ID": "@microsoft_client_id",
+    "MICROSOFT_CLIENT_SECRET": "@microsoft_client_secret",
+    "MICROSOFT_REDIRECT_URI": "@microsoft_redirect_uri",
+    "MICROSOFT_SCOPES": "files.read,files.read.all,sites.read.all",
+    "SESSION_SECRET": "@session_secret"
+  }
+}
