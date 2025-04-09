@@ -46,6 +46,7 @@ export default function FileExplorer({currentPath, setCurrentPath}: FileExplorer
     const handleSearch = (query: string) => {
         setSearchQuery(query);
         setCurrentPage(1);
+        setNextPageToken(null);
     };
 
     const handleChangePage = (page: number) => {
@@ -56,6 +57,7 @@ export default function FileExplorer({currentPath, setCurrentPath}: FileExplorer
         setCurrentPath(path);
         setCurrentPage(1);
         setSearchQuery('');
+        setNextPageToken(null);
     };
 
     const filteredFiles = searchQuery
