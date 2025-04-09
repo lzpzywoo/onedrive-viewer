@@ -8,6 +8,7 @@ export default async function handler(
 ) {
   // 从Cookie中获取访问令牌
   const accessToken = req.cookies.access_token;
+  const nextPageToken = localStorage.getItem('next_page_token');
   
   if (!accessToken) {
     return res.status(401).json({ error: '未授权' });
@@ -39,10 +40,16 @@ export default async function handler(
         apiUrl = `https://graph.microsoft.com/v1.0/me/drive/root:/${encodeURIComponent(cleanPath)}:/children`;
       }
     }
-    
+
     // 添加分页和排序参数
-    apiUrl += `?$top=${itemsPerPageNum}&$skip=${skip}&$orderby=folder,name`;
-    
+
+    if (nextPageToken) {
+      // 如果有下一页令牌，使用它
+      apiUrl = `?$top=${itemsPerPageNum}&$orderby=name` + `&$skiptoken=${nextPageToken}`;
+    } else {
+      apiUrl += `?$top=${itemsPerPageNum}&$orderby=name`;
+    }
+
     // 发起Graph API请求
     const graphResponse = await axios.get(apiUrl, {
       headers: {
@@ -52,7 +59,9 @@ export default async function handler(
     
     // 获取总计数（用于分页）
     const total = graphResponse.data.value.length;
-    
+
+    graphResponse.data['@odata.nextLink'] && localStorage.setItem('next_page_token', graphResponse.data['@odata.nextLink'].match(/&\$skiptoken=(.+)/i)[1]);
+
     // 格式化返回数据
     const files: FileItem[] = graphResponse.data.value.map((item: any) => {
       const isFolder = !!item.folder;
@@ -73,7 +82,7 @@ export default async function handler(
     return res.status(200).json({
       files,
       total,
-      hasMore: graphResponse.data['@odata.nextLink'] ? true : false,
+      hasMore: !!graphResponse.data['@odata.nextLink'],
     });
     
   } catch (error: any) {
