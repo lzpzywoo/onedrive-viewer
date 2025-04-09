@@ -29,7 +29,7 @@ export default function FileExplorer({currentPath, setCurrentPath}: FileExplorer
                 setError('');
 
                 const result = await fetchFiles(currentPath, searchQuery, currentPage, itemsPerPage, nextPageToken);
-                result.nextPageToken && setNextPageToken(result.nextPageToken);
+                setNextPageToken(result.nextPageToken);
                 setHasMore(result.hasMore);
                 setFiles(result.files);
             } catch (err) {

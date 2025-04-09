@@ -44,10 +44,11 @@ export default async function handler(
 
     if (nextPageToken) {
       // 如果有下一页令牌，使用它
-      apiUrl = `?$top=${itemsPerPageNum}&$orderby=name` + `&$skiptoken=${nextPageToken}`;
+      apiUrl += `?$top=${itemsPerPageNum}&$orderby=name` + `&$skiptoken=${nextPageToken}`;
     } else {
       apiUrl += `?$top=${itemsPerPageNum}&$orderby=name`;
     }
+    console.log("12312312",apiUrl)
 
     // 发起Graph API请求
     const graphResponse = await axios.get(apiUrl, {
